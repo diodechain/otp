@@ -68,6 +68,7 @@
 #include <wx/sysopt.h>
 #include <wx/overlay.h>
 #include <wx/notifmsg.h>
+#include <wx/webview.h>
 
 
 #ifndef wxICON_DEFAULT_BITMAP_TYPE

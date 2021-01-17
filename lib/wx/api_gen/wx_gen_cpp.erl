@@ -420,6 +420,8 @@ declare_type(N,false,_,#type{name="wxDateTime"}) ->
     w(" wxDateTime ~s;~n", [N]);
 declare_type(N,false,_,#type{name="wxColour"}) ->
     w(" wxColour ~s;~n", [N]);
+declare_type(N,false,_,#type{name="wxString"}) ->
+    w("  wxString ~s;~n", [N]);
 declare_type(N,false,_,#type{name=Type, base=int, ref=reference}) ->
     w(" ~s ~s;~n", [Type,N]);
 declare_type(N,false,_,#type{name=Type, base=int64, ref=reference}) ->
@@ -1225,6 +1227,7 @@ gen_macros() ->
     w("#include <wx/sysopt.h>~n"),
     w("#include <wx/overlay.h>~n"),
     w("#include <wx/notifmsg.h>~n"),
+    w("#include <wx/webview.h>~n"),
 
     w("~n~n", []),
     w("#ifndef wxICON_DEFAULT_BITMAP_TYPE~n",[]),

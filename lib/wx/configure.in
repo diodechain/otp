@@ -333,10 +333,42 @@ elif test  X"$MIXED_VC" = X"no"; then
 
     AM_OPTIONS_WXCONFIG
     reqwx=3.0.2
-    # Try to find debug libs first 
-    # wxelibs=core,base,gl,aui,adv
+	AM_PATH_WXCONFIG($reqwx)
 
-    AM_PATH_WXCONFIG($reqwx, wxWinWithGLDBG=1, wxWinWithGLDBG=0, [stc,xrc,html,adv,xml,core,base,gl,aui], [--unicode --debug=yes])
+	AC_MSG_CHECKING(for wxwidgets webview)
+	AC_LANG_PUSH(C++)
+	saved_CXXFLAGS=$CXXFLAGS
+	CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS"
+
+	AC_COMPILE_IFELSE(
+ 	  [AC_LANG_PROGRAM([[
+	  #ifdef WIN32
+	  # include <windows.h>
+	  #endif
+	  #include "wx/wx.h"
+	  ]], [[
+	  #if wxUSE_WEBVIEW
+	  ;
+	  #else
+	  #error barf
+	  #endif
+	  ]])],
+	  HAVE_WEBVIEW_SUPPORT=yes, HAVE_WEBVIEW_SUPPORT=no)
+
+	CXXFLAGS=$saved_CXXFLAGS
+	AC_LANG_POP(C++)
+	AC_MSG_RESULT($HAVE_WEBVIEW_SUPPORT)
+
+	if test X"$HAVE_WEBVIEW_SUPPORT" != X"yes" ; then
+	  WXELIBS=stc,xrc,html,adv,xml,core,base,gl,aui
+	  echo "wxWidgets was not compiled with --enable-webview, wxWebView will NOT be available" >> ./CONF_INFO
+	else
+	  WXELIBS=stc,xrc,html,adv,xml,core,base,gl,aui,webview
+	fi
+
+
+    # Try to find debug libs first 
+    AM_PATH_WXCONFIG($reqwx, wxWinWithGLDBG=1, wxWinWithGLDBG=0, [$WXELIBS], [--unicode --debug=yes])
 
     AC_MSG_CHECKING(for debug build of wxWidgets)
     if test "$wxWinWithGLDBG" = 1; then
@@ -354,7 +386,7 @@ elif test  X"$MIXED_VC" = X"no"; then
     AC_SUBST(DEBUG_WX_LIBS)
     AC_SUBST(DEBUG_WX_LIBS_STATIC)
     
-    AM_PATH_WXCONFIG($reqwx, wxWinWithGL=1, wxWinWithGL=0, [stc,xrc,html,adv,xml,core,base,gl,aui], [--unicode --debug=no])
+    AM_PATH_WXCONFIG($reqwx, wxWinWithGL=1, wxWinWithGL=0, [$WXELIBS], [--unicode --debug=no])
 
     AC_MSG_CHECKING(for standard build of wxWidgets)
     if test "$wxWinWithGL" = 1; then

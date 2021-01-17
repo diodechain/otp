@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE erlref SYSTEM "erlref.dtd">
+
+<!-- THIS FILE IS GENERATED DO NOT EDIT -->
+
+
+<erlref>
+<header>
+  <copyright>
+    <year>2020</year>
+    <holder>Ericsson AB. All Rights Reserved.</holder></copyright>
+  <legalnotice>
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
+
+  </legalnotice>
+  <title>wxWebViewIE</title>
+</header>
+<module>wxWebViewIE</module>
+<modulesummary>Functions for wxWebViewIE class</modulesummary>
+<description><p><seeerl marker="wxWebView"><c>wxWebView</c></seeerl> using IE backend, see <c>wxWEBVIEW_BACKEND_IE</c> (not implemented in wx).
+      </p><p>Only for:wxmsw</p><p>Since: 2.9.3 
+      </p><p>See: <seeerl marker="wxWebView"><c>wxWebView</c></seeerl>
+      </p>
+  <p>wxWidgets docs: <url href="https://docs.wxwidgets.org/3.1/classwx_web_view_i_e.html">wxWebViewIE</url></p>
+  </description>
+<datatypes><datatype><name name="wxWebViewIE"/></datatype></datatypes>
+
+<funcs>
+  <func>
+    <name name="mSWSetEmulationLevel" arity="0" clause_i="1" since=""/>
+    <fsummary>See: <c>mSWSetEmulationLevel/1</c></fsummary>
+  </func>
+  
+  <func>
+    <name name="mSWSetEmulationLevel" arity="1" clause_i="1" since=""/>
+    <fsummary>Sets emulation level. </fsummary>
+    <desc><p>Sets emulation level. 
+      </p><p>This function is useful to change the emulation level of the system browser control used for <seeerl marker="wxWebView"><c>wxWebView</c></seeerl> implementation under MSW, rather than using the currently default, IE7-compatible, level.
+      </p><p>Please notice that this function works by modifying the per-user part of MSW registry, which has several implications: first, it is sufficient to call it only once (per user) as the changes done by it are persistent and, second, if you do not want them to be persistent, you need to call it with <c>wxWEBVIEWIE_EMU_DEFAULT</c> argument explicitly.
+      </p><p>In particular, this function should be called to allow <seemfa marker="wxWebView#runScript/2"><c>wxWebView:runScript/2</c></seemfa> to work for JavaScript code returning arbitrary objects, which is not supported at the default emulation level.
+      </p><p>If set to a level higher than installed version, the highest available level will be used instead. <c>wxWEBVIEWIE_EMU_IE11</c> is recommended for best performance and experience.
+      </p><p>This function is MSW-specific and doesn't exist under other platforms.
+      </p><p>See <url href="https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation">https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation</url> for more information about browser control emulation levels.
+      </p><p>Return: true on success, false on failure (a warning message is also logged in the latter case).
+      </p><p>Since: 3.1.3 
+      </p></desc>
+  </func>
+  
+  <func>
+    <name name="mSWSetModernEmulationLevel" arity="0" clause_i="1" since=""/>
+    <fsummary>See: <c>mSWSetModernEmulationLevel/1</c></fsummary>
+  </func>
+  
+  <func>
+    <name name="mSWSetModernEmulationLevel" arity="1" clause_i="1" since=""/>
+    <fsummary/>
+    <desc><p>Deprecated: This function is kept mostly for backwards compatibility.
+      
+      </p><p>Please explicitly specify emulation level with <seemfa marker="#mSWSetEmulationLevel/1"><c>mSWSetEmulationLevel/1</c></seemfa>.
+      </p><p>Return: true on success, false on failure (a warning message is also logged in the latter case).
+      </p><p>Since: 3.1.1 
+      </p></desc>
+  </func>
+  </funcs>
+</erlref>
