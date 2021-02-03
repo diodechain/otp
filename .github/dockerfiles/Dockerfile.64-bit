@@ -18,6 +18,9 @@ WORKDIR /buildroot/otp/
 ENV CC=clang CXX=clang++ \
         CFLAGS="-O2 -g -Werror"
 
+# Temporary until base images are updated
+RUN apt-get install -y libwxgtk-webview3.0-gtk3-dev
+
 ## Configure, check that no application are disabled and then make
 RUN  ./configure --prefix=/otp && \
         if cat lib/*/CONF_INFO || cat lib/*/SKIP || cat lib/SKIP-APPLICATIONS; then exit 1; fi && \

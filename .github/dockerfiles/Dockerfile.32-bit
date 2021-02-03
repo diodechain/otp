@@ -14,6 +14,10 @@ WORKDIR /buildroot/otp/
 
 ENV CFLAGS="-O2 -g -Werror"
 
+# Temporary until base images are updated
+RUN apt-get install -y libwxgtk-webview3.0-gtk3-dev libwxgtk3.0-gtk3-dev freeglut3-dev
+RUN update-alternatives --set wx-config /usr/lib/i386-linux-gnu/wx/config/gtk3-unicode-3.0
+
 ## Configure, check that no application are disabled, then make and then build doc chunks
 RUN ./configure --prefix=/otp && \
         if cat lib/*/CONF_INFO || cat lib/*/SKIP || cat lib/SKIP-APPLICATIONS; then exit 1; fi

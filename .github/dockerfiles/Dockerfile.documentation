@@ -14,6 +14,10 @@ WORKDIR /buildroot/otp/
 
 ENV RELEASE_ROOT=/otp
 
+# Temporary until base images are updated
+RUN apt-get install -y libwxgtk-webview3.0-gtk3-dev libwxgtk3.0-gtk3-dev freeglut3-dev
+RUN update-alternatives --set wx-config /usr/lib/x86_64-linux-gnu/wx/config/gtk3-unicode-3.0
+
 RUN ./configure --prefix=/otp && make && make release
 
 RUN ./configure && make && make release
