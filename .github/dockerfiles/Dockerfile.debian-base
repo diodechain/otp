@@ -32,3 +32,9 @@ RUN if [ "$BASE" = "i386/debian" ]; then apt-get install -y \
           cp -r `dirname $dir`/* `dirname /buildroot/sysroot$dir`; \
           cp -r $dir/* `dirname /buildroot/sysroot$dir`; \
         done; fi
+
+RUN if [ "$BASE" = "i386/debian" ]; then \
+          update-alternatives --set wx-config /usr/lib/i386-linux-gnu/wx/config/gtk3-unicode-3.0 \
+        else \
+          update-alternatives --set wx-config /usr/lib/x86_64-linux-gnu/wx/config/gtk3-unicode-3.0 \
+        fi
