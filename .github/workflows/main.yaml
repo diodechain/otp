@@ -44,7 +44,7 @@ jobs:
     runs-on: windows-latest
     needs: pack
     env:
-      ERL_TOP: "${GITHUB_WORKSPACE}/otp"
+      ERL_TOP: "$GITHUB_WORKSPACE/otp"
     steps:
       # - uses: actions/checkout@v2
       - name: Download source archive
