@@ -40,19 +40,21 @@ jobs:
 
 
   build-windows:
+    defaults:
+      run:
+        shell: wsl-bash {0}
     name: Build Erlang/OTP on Windows
     runs-on: windows-latest
     needs: pack
     steps:
       # - uses: actions/checkout@v2
+      - uses: Vampire/setup-wsl@v1
       - name: Download source archive
         uses: actions/download-artifact@v2
         with:
           name: otp_git_archive
-      - shell: bash
-        run: echo ERL_TOP=`pwd`/top >> $GITHUB_ENV
-      - shell: bash
-        run: |
+      - run: echo ERL_TOP=`pwd`/top >> $GITHUB_ENV
+      - run: |
           ls
           tar -xzf ./otp_src.tar.gz
           cd otp
