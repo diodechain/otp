@@ -38,6 +38,31 @@ jobs:
           name: otp_git_archive
           path: otp_src.tar.gz
 
+
+  build-windows:
+    name: Build Erlang/OTP on Windows
+    runs-on: windows-latest
+    needs: pack
+    env:
+      ERL_TOP: "${GITHUB_WORKSPACE}/otp"
+    steps:
+      # - uses: actions/checkout@v2
+      - name: Download source archive
+        uses: actions/download-artifact@v2
+        with:
+          name: otp_git_archive
+        
+      - shell: bash
+        run: |
+          tar -xzf ./otp.tar.gz
+          cd otp
+          eval `./otp_build env_win32 x64`
+          ./otp_build autoconf
+          ./otp_build configure
+          ./otp_build boot -a
+          ./otp_build release -a
+          ./otp_build installer_win32
+
   # build:
   #   name: Build Erlang/OTP
   #   runs-on: ubuntu-latest
