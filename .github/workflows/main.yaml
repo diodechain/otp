@@ -54,6 +54,7 @@ jobs:
         
       - shell: bash
         run: |
+          ls
           tar -xzf ./otp.tar.gz
           cd otp
           eval `./otp_build env_win32 x64`
