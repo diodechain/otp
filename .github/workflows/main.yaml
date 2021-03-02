@@ -49,15 +49,16 @@ jobs:
     steps:
       # - uses: actions/checkout@v2
       - uses: Vampire/setup-wsl@v1
+        with:
+          distribution: Ubuntu-20.04
       - name: Download source archive
         uses: actions/download-artifact@v2
         with:
           name: otp_git_archive
-      - run: echo ERL_TOP=`pwd`/top >> $GITHUB_ENV
       - run: |
-          ls
           tar -xzf ./otp_src.tar.gz
           cd otp
+          export ERL_TOP=`pwd`
           eval `./otp_build env_win32 x64`
           ./otp_build autoconf
           ./otp_build configure
