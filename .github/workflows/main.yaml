@@ -60,10 +60,14 @@ jobs:
           cd /mnt/c/opt/local64/pgm/
           wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.zip
           unzip wxWidgets-3.1.4.zip -d wxWidgets-3.1.4
-          cd wxWidgets-3.1.4/3rdparty
-          nuget install Microsoft.Web.WebView2
           sed -i -r -e 's/wxUSE_POSTSCRIPT +0/wxUSE_POSTSCRIPT 1/' /c/opt/local64/pgm/wxWidgets-3.1.4/include/wx/msw/setup.h
           sed -i -r -e 's/wxUSE_WEBVIEW_EDGE +0/wxUSE_WEBVIEW_EDGE 1/' /c/opt/local64/pgm/wxWidgets-3.1.4/include/wx/msw/setup.h
+
+      # Installing webview2
+      - shell: cmd
+        run: |
+          cd c:\\opt\\local64\\pgm\\wxWidgets-3.1.4\\3rdparty
+          nuget install Microsoft.Web.WebView2
 
       # Building wxWidgets
       - shell: cmd
