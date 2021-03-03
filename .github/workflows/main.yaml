@@ -72,7 +72,7 @@ jobs:
       # Building wxWidgets
       - shell: cmd
         run: |
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\vsdevcmd -arch=amd64
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\vsdevcmd.bat" -arch=amd64
           cd c:\\opt\\local64\\pgm\\wxWidgets-3.1.4\\build\\msw
           nmake TARGET_CPU=amd64 BUILD=release SHARED=0 DIR_SUFFIX_CPU= -f makefile.vc
 
