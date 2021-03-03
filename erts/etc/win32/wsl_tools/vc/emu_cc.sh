@@ -19,7 +19,7 @@
 # %CopyrightEnd%
 #
 
-# sudo apt-get install gcc-mingw-w64 on (wsl ubuntu)
+# sudo apt-get install g++-mingw-w64 gcc-mingw-w64 on (wsl ubuntu)
 
 if [ X"$CONFIG_SUBTYPE" = X"win64" ]; then
     GCC="x86_64-w64-mingw32-gcc -m64"
