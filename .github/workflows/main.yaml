@@ -51,11 +51,11 @@ jobs:
         with:
           distribution: Ubuntu-18.04
 
-      # Installing dependencies
-      - run: apt update && apt install -y g++-mingw-w64 gcc-mingw-w64 make autoconf unzip
+      - name: Install dependencies
+        run: apt update && apt install -y g++-mingw-w64 gcc-mingw-w64 make autoconf unzip
 
-      # Downloading wxWidgets
-      - run: |
+      - name: Download wxWidgets
+        run: |
           mkdir -p /mnt/c/opt/local64/pgm/
           cd /mnt/c/opt/local64/pgm/
           wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.zip
@@ -63,27 +63,28 @@ jobs:
           sed -i -r -e 's/wxUSE_POSTSCRIPT +0/wxUSE_POSTSCRIPT 1/' /mnt/c/opt/local64/pgm/wxWidgets-3.1.4/include/wx/msw/setup.h
           sed -i -r -e 's/wxUSE_WEBVIEW_EDGE +0/wxUSE_WEBVIEW_EDGE 1/' /mnt/c/opt/local64/pgm/wxWidgets-3.1.4/include/wx/msw/setup.h
 
-      # Installing webview2
-      - shell: cmd
+      - name: Install WebView2
+        shell: cmd
         run: |
           c:
           cd c:\\opt\\local64\\pgm\\wxWidgets-3.1.4\\3rdparty
           nuget install Microsoft.Web.WebView2 -Version 1.0.705.50
           rename Microsoft.Web.WebView2.1.0.705.50 webview2
 
-      # Building wxWidgets
-      - shell: cmd
+      - name: Build wxWidgets
+        shell: cmd
         run: |
           c:
           cd c:\\opt\\local64\\pgm\\wxWidgets-3.1.4\\build\\msw
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\vsdevcmd.bat" -arch=amd64 && nmake TARGET_CPU=amd64 BUILD=release SHARED=0 DIR_SUFFIX_CPU= -f makefile.vc
 
-      # Building Erlang
       - name: Download source archive
         uses: actions/download-artifact@v2
         with:
           name: otp_git_archive
-      - run: |
+
+      - name: Compile Erlang 
+        run: |
           tar -xzf ./otp_src.tar.gz
           cd otp
           export ERL_TOP=`pwd`
@@ -94,6 +95,12 @@ jobs:
           ./otp_build release -a
           cp /mnt/c/opt/local64/pgm/wxWidgets-3.1.4/3rdparty/webview2/runtimes/win-x64/native/WebView2Loader.dll $ERL_TOP/release/win32/erts-*/bin/
           ./otp_build installer_win32
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v2
+        with:
+          name: otp_prebuilt_win32
+          path: otp/release/win32/otp*.exe
 
   # build:
   #   name: Build Erlang/OTP
