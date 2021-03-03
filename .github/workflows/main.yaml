@@ -57,7 +57,7 @@ jobs:
           name: otp_git_archive
       - run: |
           apt update
-          apt install gcc-mingw-w64 make autoconf
+          apt install -y gcc-mingw-w64 make autoconf
           tar -xzf ./otp_src.tar.gz
           cd otp
           export ERL_TOP=`pwd`
