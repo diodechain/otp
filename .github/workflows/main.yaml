@@ -47,10 +47,17 @@ jobs:
     runs-on: windows-latest
     needs: pack
     steps:
-      - shell: bash
-        run: |
-          mkdir -p /c/opt/local64/pgm/
-          cd /c/opt/local64/pgm/
+      - uses: Vampire/setup-wsl@v1
+        with:
+          distribution: Ubuntu-18.04
+
+      # Installing dependencies
+      - run: apt update && apt install -y g++-mingw-w64 gcc-mingw-w64 make autoconf unzip
+
+      # Downloading wxWidgets
+      - run: |
+          mkdir -p /mnt/c/opt/local64/pgm/
+          cd /mnt/c/opt/local64/pgm/
           wget https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.zip
           unzip wxWidgets-3.1.4.zip
           cd wxWidgets-3.1.4/3rdparty
@@ -58,23 +65,19 @@ jobs:
           sed -i -r -e 's/wxUSE_POSTSCRIPT +0/wxUSE_POSTSCRIPT 1/' /c/opt/local64/pgm/wxWidgets-3.1.4/include/wx/msw/setup.h
           sed -i -r -e 's/wxUSE_WEBVIEW_EDGE +0/wxUSE_WEBVIEW_EDGE 1/' /c/opt/local64/pgm/wxWidgets-3.1.4/include/wx/msw/setup.h
 
+      # Building wxWidgets
       - shell: cmd
         run: |
-          C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\vsdevcmd -arch=amd64
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\vsdevcmd -arch=amd64
           cd c:\\opt\\local64\\pgm\\wxWidgets-3.1.4\\build\\msw
           nmake TARGET_CPU=amd64 BUILD=release SHARED=0 DIR_SUFFIX_CPU= -f makefile.vc
 
-      # - uses: actions/checkout@v2
-      - uses: Vampire/setup-wsl@v1
-        with:
-          distribution: Ubuntu-18.04
+      # Building Erlang
       - name: Download source archive
         uses: actions/download-artifact@v2
         with:
           name: otp_git_archive
       - run: |
-          apt update
-          apt install -y g++-mingw-w64 gcc-mingw-w64 make autoconf
           tar -xzf ./otp_src.tar.gz
           cd otp
           export ERL_TOP=`pwd`
