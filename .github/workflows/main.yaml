@@ -61,10 +61,7 @@ jobs:
           unzip openssl-1.1.1j_4-win64-mingw.zip
           mv openssl-1.1.1j-win64-mingw OpenSSL-Win64
           cd OpenSSL-Win64/lib
-          for file in *.a; do
-            cp "$file" "${basename "$file" .a}.lib"
-          done
-
+          for file in *.a; do cp $file $(basename "$file" .a).lib; done
 
       - name: Download wxWidgets
         run: |
