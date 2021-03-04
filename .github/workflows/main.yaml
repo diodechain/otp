@@ -55,6 +55,7 @@ jobs:
         run: apt update && apt install -y g++-mingw-w64 gcc-mingw-w64 make autoconf unzip
 
       - name: Install openssl
+        shell: cmd
         run: choco install openssl.light --params "/InstallDir:C:\\OpenSSL-Win64"
 
       - name: Download wxWidgets
