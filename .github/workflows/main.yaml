@@ -56,7 +56,7 @@ jobs:
 
       - name: Install openssl
         shell: cmd
-        run: choco install openssl.light --params "/InstallDir:C:\\OpenSSL-Win64"
+        run: choco install openssl.light --force --params "/InstallDir:C:\\OpenSSL-Win64"
 
       - name: Download wxWidgets
         run: |
