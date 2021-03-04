@@ -60,6 +60,11 @@ jobs:
           wget https://curl.se/windows/dl-7.75.0_4/openssl-1.1.1j_4-win64-mingw.zip
           unzip openssl-1.1.1j_4-win64-mingw.zip
           mv openssl-1.1.1j-win64-mingw OpenSSL-Win64
+          cd OpenSSL-Win64/lib
+          for file in *.a; do
+            cp "$file" "${basename "$file" .a}.lib"
+          done
+
 
       - name: Download wxWidgets
         run: |
@@ -97,7 +102,7 @@ jobs:
           export ERL_TOP=`pwd`
           eval `./otp_build env_win32 x64`
           ./otp_build autoconf
-          ./otp_build configure
+          ./otp_build configure --
           ./otp_build boot -a
           ./otp_build release -a
           cp /mnt/c/opt/local64/pgm/wxWidgets-3.1.4/3rdparty/webview2/runtimes/win-x64/native/WebView2Loader.dll $ERL_TOP/release/win32/erts-*/bin/
