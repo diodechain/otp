@@ -51,12 +51,15 @@ jobs:
         with:
           distribution: Ubuntu-18.04
 
-      - name: Install dependencies
+      - name: Install WSL dependencies
         run: apt update && apt install -y g++-mingw-w64 gcc-mingw-w64 make autoconf unzip
 
       - name: Install openssl
-        shell: cmd
-        run: choco install openssl.light --force --params "/InstallDir:C:\\OpenSSL-Win64"
+        run: |
+          cd /mnt/c
+          wget https://curl.se/windows/dl-7.75.0_4/openssl-1.1.1j_4-win64-mingw.zip
+          unzip openssl-1.1.1j_4-win64-mingw.zip
+          mv openssl-1.1.1j-win64-mingw OpenSSL-Win64
 
       - name: Download wxWidgets
         run: |
