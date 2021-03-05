@@ -97,16 +97,22 @@ jobs:
           eval `./otp_build env_win32 x64`
           ./otp_build autoconf
           ./otp_build configure
-          ./otp_build boot -a
-          ./otp_build release -a
-          cp /mnt/c/opt/local64/pgm/wxWidgets-3.1.4/3rdparty/webview2/runtimes/win-x64/native/WebView2Loader.dll $ERL_TOP/release/win32/erts-*/bin/
-          ./otp_build installer_win32
+          # ./otp_build boot -a
+          # ./otp_build release -a
+          # cp /mnt/c/opt/local64/pgm/wxWidgets-3.1.4/3rdparty/webview2/runtimes/win-x64/native/WebView2Loader.dll $ERL_TOP/release/win32/erts-*/bin/
+          # ./otp_build installer_win32
 
-      - name: Upload installer
+      - name: Upload config logs
         uses: actions/upload-artifact@v2
         with:
-          name: otp_prebuilt_win32
-          path: otp/release/win32/otp*.exe
+          name: otp_logs
+          path: otp/lib/wx/config.log
+
+      # - name: Upload installer
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: otp_prebuilt_win32
+      #     path: otp/release/win32/otp*.exe
 
   # build:
   #   name: Build Erlang/OTP
