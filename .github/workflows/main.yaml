@@ -82,7 +82,8 @@ jobs:
         run: |
           c:
           cd c:\\opt\\local64\\pgm\\wxWidgets-3.1.4\\build\\msw
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\Tools\\vsdevcmd.bat" -arch=amd64 && nmake TARGET_CPU=amd64 BUILD=release SHARED=0 DIR_SUFFIX_CPU= -f makefile.vc
+          call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\VC\Auxiliary\\Build\\vcvars64.bat"
+          nmake TARGET_CPU=amd64 BUILD=release SHARED=0 DIR_SUFFIX_CPU= -f makefile.vc
 
       - name: Download source archive
         uses: actions/download-artifact@v2
