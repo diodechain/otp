@@ -63,7 +63,7 @@ jobs:
         run: |
           cd otp
           export BUILD_ARCH=`./erts/autoconf/config.guess`
-          export LIBS=`find . -not -path "*${BUILD_ARCH}*" -path "*${TARGET_ARCH}*" -name "*.a"`
+          export LIBS=`find . -not -path "*${BUILD_ARCH}*" -path "*${TARGET_ARCH}*" -not -name "*_st.a" -not -name "*_r.a" -name "*.a" | awk '{ "basename " $1 | getline name; names[name] = $1 } END { for (n in names) { print names[n] }}'`
           libtool -static -o liberlang.a $LIBS
           xcodebuild -create-xcframework -output ./liberlang.xcframework -library liberlang.a
 
