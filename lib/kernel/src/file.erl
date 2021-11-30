@@ -97,7 +97,7 @@
 		   | 'delayed_write' | {'read_ahead', Size :: pos_integer()}
 		   | 'read_ahead' | 'compressed'
 		   | {'encoding', unicode:encoding()}
-		   | sync.
+		   | sync | 'ram_overgrow' | 'ram_overgrow_2x'.
 -type deep_list() :: [char() | atom() | deep_list()].
 -type name()      :: string() | atom() | deep_list().
 -type name_all()  :: string() | atom() | deep_list() | (RawFilename :: binary()).

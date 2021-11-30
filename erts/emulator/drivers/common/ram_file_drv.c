@@ -60,10 +60,13 @@
 /*
  * Open modes for RAM_FILE_OPEN.
  */
-#define RAM_FILE_MODE_READ       1
-#define RAM_FILE_MODE_WRITE      2  /* Implies truncating file 
-				     * when used alone. */
-#define RAM_FILE_MODE_READ_WRITE 3
+#define RAM_FILE_MODE_READ        1
+#define RAM_FILE_MODE_WRITE       2  /* Implies truncating file 
+                                      * when used alone. */
+#define RAM_FILE_MODE_READ_WRITE  3
+
+#define RAM_FILE_FLAG_OVERGROW    4
+#define RAM_FILE_FLAG_OVERGROW_2X 8
 
 /*
  * Seek modes for RAM_FILE_LSEEK.
@@ -319,6 +322,8 @@ static ErlDrvSSizeT ram_file_write(RamFile *f, char *buf, ErlDrvSSizeT len,
 			  ErlDrvSSizeT *location, int *error)
 {
     ErlDrvSSizeT cur = f->cur;
+    ErlDrvSSizeT new_size;
+    ErlDrvSSizeT grow_size;
     
     if (!(f->flags & RAM_FILE_MODE_WRITE)) {
 	*error = EBADF;
@@ -329,8 +334,12 @@ static ErlDrvSSizeT ram_file_write(RamFile *f, char *buf, ErlDrvSSizeT len,
 	*error = EINVAL;
 	return -1;
     }
-    if (cur+len > f->size && ram_file_expand(f, cur+len, error) < 0) {
-	return -1;
+    if (cur+len > f->size) {
+        grow_size = (f->flags & RAM_FILE_FLAG_OVERGROW_2X) != 0 ? f->size :
+                    ((f->flags & RAM_FILE_FLAG_OVERGROW) != 0 ? f->size/2 : 0);
+        new_size = MAX(cur+len, f->size+grow_size);
+        if (ram_file_expand(f, new_size, error) < 0)
+	        return -1;
     }
     if (len) sys_memcpy(f->buf+cur, buf, len);
     cur += len;
@@ -399,6 +408,7 @@ static void rfile_command(ErlDrvData e, char* buf, ErlDrvSizeT count)
     ErlDrvBinary* bin;
     char header[5];     /* result code + count */
     ErlDrvSSizeT offset;
+    ErlDrvSSizeT length;
     ErlDrvSSizeT origin;		/* Origin of seek. */
     ErlDrvSSizeT n;
 
@@ -520,10 +530,21 @@ static void rfile_command(ErlDrvData e, char* buf, ErlDrvSizeT count)
 	break;
 
     case RAM_FILE_ALLOCATE:
-	if (f->flags == 0)
+	if (f->flags == 0) {
 	    error_reply(f, EBADF);
-	else
-	    reply(f, 1, 0);
+        break;
+    }
+    offset = get_int32(buf);
+    length = get_int32(buf+4);
+    n = MAX(offset+length, f->end+length);
+    if (n > f->size && ram_file_expand(f, n, &error) < 0) {
+        error_reply(f, error);
+    }
+    if (offset < f->end) {
+        sys_memmove(f->buf+offset+length, f->buf+offset, f->end-offset);
+    }
+    f->end = n;
+    reply(f, 1, 0);
 	break;
     }
     /*

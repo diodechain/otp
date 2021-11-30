@@ -951,6 +951,20 @@ f.txt:  {person, "kalle", 25}.
             <p><c>File</c> must be <c>iodata()</c>. Returns an <c>fd()</c>, which lets
 	    module <c>file</c> operate on the data in-memory as if it is a file.</p>
           </item>
+          <tag><c>ram_overgrow</c></tag>
+          <item>
+            <p>Instructs the in-memory file to handle appending writes faster by
+            growing the buffer capacity larger than needed for a single insert. The
+            internal buffer is grown in steps of a factor of 1.5x of it's current size.</p>
+            <p>This option is only allowed on <c>ram</c> files.</p>
+          </item>
+          <tag><c>ram_overgrow_2x</c></tag>
+          <item>
+            <p>Instructs the in-memory file to handle appending writes faster by
+            growing the buffer capacity larger than needed for a single insert. The
+            internal buffer is grown in steps of a factor of 2x of it's current size.</p>
+            <p>This option is only allowed on <c>ram</c> files.</p>
+          </item>
           <tag><c>sync</c></tag>
           <item>
             <p>On platforms supporting it, enables the POSIX <c>O_SYNC</c> synchronous

@@ -67,8 +67,8 @@
 -define(RAM_FILE_MODE_READ,       1).
 -define(RAM_FILE_MODE_WRITE,      2).
 -define(RAM_FILE_MODE_READ_WRITE, 3).
-%% Use this mask to get just the mode bits to be passed to the driver.
--define(RAM_FILE_MODE_MASK, 3).
+-define(RAM_FILE_FLAG_OVERGROW,   4).
+-define(RAM_FILE_FLAG_OVERGROW_2X,8).
 
 %% Seek modes for RAM_FILE_LSEEK
 -define(RAM_FILE_SEEK_SET,        0).
@@ -415,6 +415,10 @@ open_mode([write|Rest], {Mode, Opts}) ->
     open_mode(Rest, {Mode bor ?RAM_FILE_MODE_WRITE, Opts});
 open_mode([binary|Rest], {Mode, Opts}) ->
     open_mode(Rest, {Mode, [binary | Opts]});
+open_mode([ram_overgrow|Rest], {Mode, Opts}) ->
+    open_mode(Rest, {Mode bor ?RAM_FILE_FLAG_OVERGROW, Opts});
+open_mode([ram_overgrow_2x|Rest], {Mode, Opts}) ->
+    open_mode(Rest, {Mode bor ?RAM_FILE_FLAG_OVERGROW_2X, Opts});
 open_mode([], {Mode, Opts}) ->
     {Mode, Opts};
 open_mode(_, _) ->
