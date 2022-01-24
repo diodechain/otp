@@ -571,8 +571,8 @@ erts_open_driver(erts_driver_t* driver,	/* Pointer to driver. */
 	    driver = NULL;
 	} else {
 #ifdef __IOS__ 
-	    erts_rwmtx_runlock(&erts_driver_list_lock);
-	    ERTS_OPEN_DRIVER_RET(NULL, -3, BADARG);	   
+        /* iOS has no notion of executables that can be spawned */
+	    driver = NULL;
 #endif
     }
 
