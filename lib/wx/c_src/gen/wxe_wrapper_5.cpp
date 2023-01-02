@@ -2162,9 +2162,9 @@ void wxMenuItem_GetBitmap(WxeApp *app, wxeMemEnv *memenv, wxeCommand& Ecmd)
   wxMenuItem *This;
   This = (wxMenuItem *) memenv->getPtr(env, argv[0], "This");
   if(!This) throw wxe_badarg("This");
-  const wxBitmap * Result = &This->GetBitmap();
+  //const wxBitmap * Result = &This->GetBitmap();
   wxeReturn rt = wxeReturn(memenv, Ecmd.caller, true);
-  rt.send(  rt.make_ref(app->getRef((void *)Result,memenv), "wxBitmap"));
+  rt.send(  rt.make_ref(app->getRef((void *)0,memenv), "wxBitmap"));
 
 }
 
