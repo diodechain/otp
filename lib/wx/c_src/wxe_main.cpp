@@ -46,6 +46,40 @@ extern "C" {
 }
 #endif
 
+#if wxUSE_WEBVIEW_CHROMIUM
+#include "wx/webview_chromium.h"
+
+#if defined(_MSC_VER) 
+    #pragma comment(lib, "libcef")
+    #pragma comment(lib, "libcef_dll_wrapper")
+#endif // _MSC_VER
+
+int check_webview_backend() {
+  // Note that this is more than just a minor convenience: this also ensures
+  // that we reference wxWebViewBackendChromium from this file and this means
+  // that MSVC linker keeps wxWebViewChromium code when using static
+  // libraries while without it, it could discard it completely and it
+  // wouldn't be available during run-time at all.
+  size_t cef_len = 127;
+  char cef[128];
+  int res = enif_getenv("WX_CHECK_CEF", cef, &cef_len);
+
+  if (res == 0) {
+    if (wxWebView::IsBackendAvailable(wxWebViewBackendChromium)) {
+      enif_fprintf(stderr, "%s is available\n", wxWebViewBackendChromium);
+    } else {
+      enif_fprintf(stderr, "%s is not available\n", wxWebViewBackendChromium);
+    }
+  }
+  return 0;
+}
+#else
+int check_webview_backend() {
+  return 0;
+}
+#endif // wxUSE_WEBVIEW_CHROMIUM
+
+
 void *wxe_main_loop(void * );
 
 /* ************************************************************
@@ -135,6 +169,7 @@ void *wxe_main_loop(void * _unused)
 #endif
 
   wxe_ps_init();
+  check_webview_backend();
   result = wxEntry(argc, argv);
   // fprintf(stderr, "WXWidgets quits main loop %d \r\n", result);
   if(result >= 0 && wxe_status == WXE_INITIATED) {
