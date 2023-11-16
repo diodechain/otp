@@ -68,7 +68,7 @@ int check_webview_backend() {
     if (wxWebView::IsBackendAvailable(wxWebViewBackendChromium)) {
       enif_fprintf(stderr, "%s is available\n", wxWebViewBackendChromium);
     } else {
-      enif_fprintf(stderr, "%s not is available\n", wxWebViewBackendChromium);
+      enif_fprintf(stderr, "%s is not available\n", wxWebViewBackendChromium);
     }
   }
   return 0;
@@ -141,25 +141,43 @@ void stop_native_gui(ErlNifEnv* env)
  *  wxWidgets Thread
  * ************************************************************/
 
+void add_arg(wxChar *buf, size_t *buf_pos, size_t buf_size, wxChar* argv[], int *argc, const char *arg)
+{
+    wxString str = wxString::FromUTF8(arg);
+    int str_size = (*buf_pos + str.Length() < buf_size) ? str.Length() : buf_size - *buf_pos;
+    if (str_size == 0) return;
+
+    argv[(*argc)++] = buf + *buf_pos;
+    for(int i = 0; i < str_size; i++) {
+      buf[(*buf_pos)++] = str[i];
+    }
+    buf[(*buf_pos)++] = 0;
+}
+
 void *wxe_main_loop(void * _unused)
 {
   int result;
-  int  argc = 1;
-  wxChar temp[128] = L"Erlang";
+  int argc = 0;
+  wxChar *argv[64];
+  wxChar buffer[128];
+  size_t buffer_pos = 0;
 
-  size_t app_len = 127;
-  char app_title_buf[128];
-  int res = enif_getenv("WX_APP_TITLE", app_title_buf, &app_len);
-  if (res == 0) {
-    wxString title = wxString::FromUTF8(app_title_buf);
-    int size = title.Length() < 127 ? title.Length() : 126;
-    for(int i = 0; i < size; i++) {
-      temp[i] = title[i];
-    }
-    temp[size] = 0;
+  char env_buf[128];
+  size_t env_buf_len = sizeof(env_buf) - 1;
+
+  if (enif_getenv("WX_APP_TITLE", env_buf, &env_buf_len) == 0) {
+    add_arg(buffer, &buffer_pos, sizeof(buffer) - 1, argv, &argc, env_buf);
+  } else {
+    add_arg(buffer, &buffer_pos, sizeof(buffer) - 1, argv, &argc, "Erlang");
   }
 
-  wxChar * argv[] = {(wxChar *)temp, NULL};
+  if (enif_getenv("WX_ARGS", env_buf, &env_buf_len) == 0) {
+    char *pch = strtok(env_buf, ",");
+    while(pch) {
+      add_arg(buffer, &buffer_pos, sizeof(buffer) - 1, argv, &argc, pch);
+      pch = strtok(NULL, ",");
+    }
+  }
 
 #ifdef _WIN32
   // Setup that wxWidgets should look for cursors and icons in
