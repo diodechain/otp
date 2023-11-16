@@ -179,6 +179,9 @@ void *wxe_main_loop(void * _unused)
     }
   }
 
+  add_arg(buffer, &buffer_pos, sizeof(buffer) - 1, argv, &argc, "--no-sandbox");
+  add_arg(buffer, &buffer_pos, sizeof(buffer) - 1, argv, &argc, "--in-process-gpu");
+
 #ifdef _WIN32
   // Setup that wxWidgets should look for cursors and icons in
   // this dll and not in werl.exe (which is the default)
