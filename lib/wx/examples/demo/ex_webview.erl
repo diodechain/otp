@@ -45,7 +45,11 @@ do_init(Config) ->
     Sizer = wxBoxSizer:new(?wxHORIZONTAL),
 
     os:type() == {win32,nt} andalso wx_misc:mSWSetEmulationLevel(?wxWEBVIEWIE_EMU_IE11),
-    try wxWebView:new(Parent, ?wxID_ANY, [{url, "https://www.erlang.org/"}]) of
+    Opts = case os:getenv("WX_WEBVIEW_BACKEND") of
+        false -> [{url, "https://www.erlang.org/"}];
+        Backend -> [{url, "https://www.erlang.org/"}, {backend, Backend}]
+    end,
+    try wxWebView:new(Parent, ?wxID_ANY, Opts) of
     WebView ->
         {ok, Timer} = timer:send_interval(100, update_passive_boxes),
         Events = [webview_navigating, webview_navigated, webview_loaded, webview_error,
