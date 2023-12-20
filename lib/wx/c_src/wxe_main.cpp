@@ -168,6 +168,8 @@ void *wxe_main_loop(void * _unused)
   wxSetInstance((HINSTANCE) WXEHandle);
 #endif
 
+  delete wxLog::SetActiveTarget(new wxLogStderr);
+
   wxe_ps_init();
   check_webview_backend();
   result = wxEntry(argc, argv);
