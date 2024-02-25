@@ -2145,8 +2145,8 @@ initial_env_massage(void)
 
 	buf = malloc(BUFSIZE);
 	while(fgets(buf, BUFSIZE, fp)) {
-		p = strchr(buf, '\n');
-		if (p) *p = '\0';
+		if ((p = strchr(buf, '\n'))) *p = '\0';
+		if ((p = strchr(buf, '\r'))) *p = '\0';
 		if (!(value = strchr(buf, '='))) continue;
 		new_value = substitute_env(buf, value);
 		putenv(new_value);
