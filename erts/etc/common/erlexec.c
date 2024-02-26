@@ -2178,7 +2178,7 @@ substitute_env(char *value, char *pos)
 	sub = get_env(name);
 	if (!sub) {
 		free(name);
-		return value;
+		return substitute_env(value, end);
 	}
 
 	new_value = malloc(strlen(value) + strlen(sub) - (end - begin) + 1);
