@@ -2139,6 +2139,16 @@ initial_env_massage(void)
 	char *new_value;
 	char *p;
 
+	// Setting the pid to make it available to env substitutions
+	char pid[32];
+	#ifdef __WIN32__
+    sprintf(pid, "%d", GetCurrentProcessId());
+	#else
+    sprintf(pid, "%d", getpid());
+	#endif
+	set_env("PID", pid);
+
+
 	if (!(env_file = get_env_name())) return;
 	// printf("env_file: %s\n", env_file);
 	if (!(fp = fopen(env_file, "rb"))) return;
