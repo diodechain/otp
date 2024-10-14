@@ -3,27 +3,54 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>Erlang</string>
-	<key>CFBundleDisplayname</key>
-	<string>Erlang</string>
+	<string>dDrive</string>
+	<key>CFBundleDisplayName</key>
+	<string>dDrive</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>run</string>
+	<key>CFBundleIconFile</key>
+	<string>icons.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.erlang.beam</string>
-	<!-- <key>NSUserNotificationAlertStyle</key>
-	<string>alert</string> -->
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSExceptionDomains</key>
+	<string>io.diode.ddrive</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.13.4</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.13.4</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.12.0</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.productivity</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>LSMultipleInstancesProhibited</key>
+	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>LSArchitecturePriority</key>
+	<array>
+		<string>x86_64</string>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
 		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-			</dict>
+			<key>CFBundleTypeName</key>
+			<string>All Files</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
 		</dict>
-	</dict>
+	</array>
 </dict>
 </plist>
